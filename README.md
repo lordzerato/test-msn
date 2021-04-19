@@ -1,7 +1,15 @@
 # test-msn
 
+## how to use
+1. command "git clone" to your chosen directory
+2. open folder with code editor (ex: vsc)
+3. command "cd server" / "cd client", then "npm install"
+4. adjust config/config.json your computer setting
+5. furthermore, open package.json @scripts for option to command run 
+6. "run [option]"
+
 ## description
-1.  Aplikasi Node JS  dengan menggunakan express js sebagai framework
+1. Aplikasi Node JS  dengan menggunakan express js sebagai framework
 2. Aplikasi dapat menampilkan data hasil dari API kemudian disimpan ke dalam database.
  
 -  Get Data Product (Method Get)
