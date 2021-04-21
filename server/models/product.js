@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       Product.hasOne(models.Price, { foreignKey: "term_id" }),
       Product.hasOne(models.Preview, { foreignKey: "term_id" }),
       Product.hasOne(models.Stock, { foreignKey: "term_id" })
-      Product.belongsTo(models.Category, { through: "Pivots" })
+      Product.belongsToMany(models.Category, {
+        through: "Pivots",
+        foreignKey: "term_id"
+      })
     }
   };
   Product.init({

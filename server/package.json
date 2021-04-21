@@ -9,10 +9,15 @@
     "prep1": "npx sequelize db:create",
     "prep2": "npx sequelize db:migrate"
   },
-  "keywords": ["node.js", "express", "postgreSQL"],
+  "keywords": [
+    "node.js",
+    "express",
+    "postgreSQL"
+  ],
   "author": "RamadanFauzi",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "pg": "^8.6.0",
