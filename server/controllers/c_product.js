@@ -6,6 +6,7 @@ const {
     Preview,
     Stock } = require('../models')
 const axios = require('axios')
+const { get } = require('../routes/r_product')
 
 module.exports = class ControllerProduct{
     static async addAuto(req, res, next) {
@@ -108,7 +109,7 @@ module.exports = class ControllerProduct{
 
     static async showByCategory(req, res, next) {
         try {
-            const getId = +req.params.id_category
+            const getId = +req.params.category_id
             const data = await Product.findAll({
                 include: [
                     {
@@ -146,6 +147,113 @@ module.exports = class ControllerProduct{
             res.status(200).json({
                 message: data
             })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    static async showSelectedProduct(req, res, next) {
+        try {
+            const getId = +req.params.product_id
+            const found = await Product.findByPk(getId)
+            if(!found) {
+                res.status(404).json({
+                    message: "Data Not Found!"
+                })
+            } else {
+                res.status(200).json(found)
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    static async removeProduct(req, res, next) {
+        try {
+            const getId = +req.params.product_id
+            const found = await Product.findByPk(getId)
+            if(!found) {
+                res.status(404).json({
+                    message: "Data Not Found!"
+                })
+            } else {
+                await Price.destroy({
+                    where: {
+                        term_id: getId
+                    }
+                })
+                await Preview.destroy({
+                    where: {
+                        term_id: getId
+                    }
+                })
+                await Stock.destroy({
+                    where: {
+                        term_id: getId
+                    }
+                })
+                await Pivot.destroy({
+                    where: {
+                        term_id: getId
+                    }
+                })
+                await Product.destroy({
+                    where: {
+                        id: getId
+                    }
+                })
+                res.status(200).json({
+                    message: "Success"
+                })
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    static async updateProduct(req, res, next) {
+        try {
+            const getId = +req.params.product_id
+            const found = await Product.findByPk(getId)
+            if(!found) {
+                res.status(404).json({
+                    message: "Data Not Found!"
+                })
+            } else {
+                const { title, slug, lang, auth_id, status, type,
+                    count, category_id, price, stock, t_preview, content } = req.body
+                const newData = {
+                    title: title,
+                    slug: slug,
+                    lang: lang,
+                    auth_id: auth_id,
+                    status: status,
+                    type: type,
+                    count: count
+                }
+                await Product.update(newData, {
+                    where: { id: getId }
+                })
+                await Price.update({ price: price }, {
+                    where: { term_id: getId }
+                })
+                await Pivot.update({ category_id: category_id }, {
+                    where: { term_id: getId }
+                })
+                await Stock.update({ stock: stock }, {
+                    where: { term_id: getId }
+                })
+                await Preview.update({
+                    type: t_preview,
+                    content: content
+                },
+                {
+                    where: { term_id: getId }
+                })
+                res.status(200).json({
+                    message: "Success"
+                })
+            }
         } catch (err) {
             console.log(err);
         }
